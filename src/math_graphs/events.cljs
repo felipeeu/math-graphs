@@ -8,3 +8,10 @@
  (fn [_ _]
    db/default-db))
 
+(re-frame/reg-event-db
+ ::set-angular
+ (fn [db [_ angular]]
+   (assoc-in db [:equation :line :ang] angular)))
+
+
+

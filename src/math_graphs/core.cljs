@@ -13,9 +13,9 @@
 
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
-  (let [container (.getElementById js/document "app")
-        root (rdom-client/create-root container)]
-    (rdom-client/render root [views/main-panel])))
+  (let [container (.getElementById js/document "app")]
+    (rdom-client/render
+     (rdom-client/create-root container) [views/main-panel])))
 
 (defn init []
   (re-frame/dispatch-sync [::events/initialize-db])

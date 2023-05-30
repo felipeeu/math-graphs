@@ -11,3 +11,9 @@
  ::get-axes
  (fn [db [_ type]]
    (get-in db [:axis-values type])))
+
+(re-frame/reg-sub
+ ::get-equation-data
+ (fn [db [_ equation-type]]
+   (get-in db [:equation equation-type])))
+
