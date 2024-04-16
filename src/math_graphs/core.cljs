@@ -11,13 +11,25 @@
   (when config/debug?
     (println "dev mode")))
 
-(defn ^:dev/after-load mount-root []
+(defonce root-container
+  (rdom-client/create-root (js/document.getElementById "app")))
+
+(defn mount-ui
+  []
+  (rdom-client/render root-container [views/main-panel]))
+
+
+
+(defn ^:dev/after-load clear-cache-and-render!
+  []
+  ;; The `:dev/after-load` metadata causes this function to be called
+  ;; after shadow-cljs hot-reloads code. We force a UI update by clearing
+  ;; the Reframe subscription cache.
   (re-frame/clear-subscription-cache!)
-  (let [container (.getElementById js/document "app")]
-    (rdom-client/render
-     (rdom-client/create-root container) [views/main-panel])))
+  (mount-ui))
+
 
 (defn init []
   (re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
-  (mount-root))
+  (mount-ui))
