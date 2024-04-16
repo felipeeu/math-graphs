@@ -1,6 +1,7 @@
 (ns math-graphs.views
   (:require [components.axis :as axis]
-            [components.equations :refer [line-equation line-equation-control]]
+            [components.equations :refer [shape-to-equation parabolic-equation-control vertex-control]]
+            [components.shapes :refer [shape-selector]]
             [math-graphs.subs :as subs]
             [re-frame.core :as re-frame]
             [reagent.core :refer [create-class]]
@@ -28,15 +29,21 @@
                                     height (.-height cv)]
                                 (.reset ctx)
                                 (axis/init-graph ctx width height)
-                                (line-equation ctx)))})))
+                                (shape-to-equation ctx)))})))
 
 
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])
-        data @(re-frame/subscribe [::subs/get-equation-data :line])]
+        shape @(re-frame/subscribe [::subs/shape])
+        equation  @(re-frame/subscribe [::subs/equation])]
     [:div
      [:h1
-      "Hello from " @name]
-     (line-equation-control)
-     [canvas-inner data]]))
+      "Hello from " shape]
+     [:h2 @name]
+
+     (parabolic-equation-control)
+     (vertex-control "y")
+     (vertex-control "x")
+     (shape-selector)
+     [canvas-inner  equation shape]]))

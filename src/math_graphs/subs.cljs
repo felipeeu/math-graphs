@@ -17,3 +17,14 @@
  (fn [db [_ equation-type]]
    (get-in db [:equation equation-type])))
 
+
+(re-frame/reg-sub
+ ::shape
+ (fn [db]
+   (:shape db)))
+
+
+(re-frame/reg-sub
+ ::equation
+ (fn [db]
+   (:equation db)))
