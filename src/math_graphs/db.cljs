@@ -1,7 +1,7 @@
 (ns math-graphs.db)
 
 (def default-db
-  {:name "re-frame"
+  {:name "re-frame cljs"
    :shape "line"
    :canvas-color "red"
    :equation {:line {:start [0 0]

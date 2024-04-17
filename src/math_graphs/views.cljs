@@ -1,6 +1,7 @@
 (ns math-graphs.views
   (:require [components.axis :as axis]
-            [components.equations :refer [shape-to-equation parabolic-equation-control vertex-control]]
+            [components.equations :refer [display-parabola-equation]]
+            [components.chart :refer [shape-to-chart]]
             [components.shapes :refer [shape-selector]]
             [math-graphs.subs :as subs]
             [re-frame.core :as re-frame]
@@ -29,7 +30,7 @@
                                     height (.-height cv)]
                                 (.reset ctx)
                                 (axis/init-graph ctx width height)
-                                (shape-to-equation ctx)))})))
+                                (shape-to-chart ctx)))})))
 
 
 
@@ -42,8 +43,10 @@
       "Hello from " shape]
      [:h2 @name]
 
-     (parabolic-equation-control)
-     (vertex-control "y")
-     (vertex-control "x")
-     (shape-selector)
+     [:div {:class "col"}
+      (shape-selector)
+      (case shape
+        "parabola" (display-parabola-equation)
+        nil)]
+
      [canvas-inner  equation shape]]))
