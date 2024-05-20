@@ -7,12 +7,13 @@
 (defn get-line-chart
   [context]
   (let [{:keys [start end ang]} @(re-frame/subscribe [::subs/get-equation-data :line])
-        [x-start _] start
-        [x-end _] end]
+        [x-start y-start] start
+        [x-end y-end] end
+        c 60]
 
     (.beginPath context)
-    (.moveTo context x-start (inverted-y-axis (* x-start ang)))
-    (.lineTo context x-end (inverted-y-axis (* x-end ang)))
+    (.moveTo context (+ x-start c) (inverted-y-axis (+ (* y-start ang) c)))
+    (.lineTo context (+ x-end c)  (inverted-y-axis (+ (* y-end ang) c)))
     (.stroke context)))
 
 (defn get-parabola-chart
@@ -36,26 +37,29 @@
     (.stroke context)))
 
 
-
-(defn circle-equation
+(defn get-circle-chart
+  "get dynamic circle chart to plot"
   [context]
-  (.beginPath context)
-  (.arc context 100 75 50 0 (* 2 Math/PI))
-  (.stroke context))
+  (let [{:keys [center radius]} @(re-frame/subscribe [::subs/get-equation-data :circle])
+        [center-x center-y] center
+        final-angle  (* 2 Math/PI)
+        initial-angle 0]
+    (.beginPath context)
+    (.arc context center-x center-y radius initial-angle final-angle)
+    (.stroke context)))
 
-(defn ellipse-equation
+
+(defn get-ellipse-chart
   [context]
   (.beginPath context)
   (.ellipse context 100 100 50 75 (/ Math/PI 4)  0 (* 2 Math/PI))
   (.stroke context))
 
 
-
 (def chart-map {:line get-line-chart
                 :parabola get-parabola-chart
-                :circle circle-equation
-                :ellipse ellipse-equation})
-
+                :circle get-circle-chart
+                :ellipse get-ellipse-chart})
 
 
 (defn shape-to-chart
