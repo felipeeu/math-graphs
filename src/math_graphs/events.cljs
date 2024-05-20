@@ -8,25 +8,21 @@
  (fn [_ _]
    db/default-db))
 
-(re-frame/reg-event-db
- ::set-angular
- (fn [db [_ angular]]
-   (assoc-in db [:equation :line :ang] (js/parseInt angular))))
 
 (re-frame/reg-event-db
- ::set-parabola-concavity
- (fn [db [_ concavity]]
-   (assoc-in db [:equation :parabola :concavity] (js/parseInt concavity))))
+ ::set-variable-by-shape
+ (fn [db [_ value shape variable]]
+
+   (assoc-in db [:equation (keyword shape) (keyword variable)]  (js/parseInt value))))
+
 
 (re-frame/reg-event-db
- ::set-parabola-distance
- (fn [db [_ distance]]
-   (assoc-in db [:equation :parabola :distance]  distance)))
+ ::set-point
+ (fn [db [_ shape variable value]]
+   (assoc-in db [:equation
+                 (keyword shape)
+                 (keyword variable)]  value)))
 
-(re-frame/reg-event-db
- ::set-parabola-vertex
- (fn [db [_ vertex]]
-   (assoc-in db [:equation :parabola :vertex]  vertex)))
 
 
 (re-frame/reg-event-db
